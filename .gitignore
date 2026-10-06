@@ -1,9 +1,12 @@
-# Supabase configuration
+# Supabase local configuration
 js/supabase_config.js
 
 # Environment files
 .env
 .env.*
+
+# Netlify local files
+.netlify/
 
 # macOS
 .DS_Store

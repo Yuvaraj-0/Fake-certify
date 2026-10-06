@@ -1,95 +1,233 @@
-const verifyForm =
-    document.getElementById("verifyForm");
 
-const certificateIdInput =
-    document.getElementById(
-        "certificateIdInput"
-    );
+let verifyForm = null;
 
-const verifyMessage =
-    document.getElementById(
-        "verifyMessage"
-    );
+let certificateIdInput = null;
 
-const certificateResult =
-    document.getElementById(
-        "certificateResult"
-    );
+let verifyMessage = null;
+
+let certificateResult = null;
 
 
-// =================================
-// GET ID FROM URL
-// =================================
+// ==================================================
+// PAGE LOAD
+// ==================================================
 
-const params =
-    new URLSearchParams(
-        window.location.search
-    );
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
 
-const urlCertificateId =
-    params.get("id");
-
-
-if (urlCertificateId) {
-
-    certificateIdInput.value =
-        urlCertificateId;
-
-    verifyCertificate(
-        urlCertificateId
-    );
-}
+        console.log(
+            "verify.js loaded"
+        );
 
 
-// =================================
-// FORM
-// =================================
+        // ==============================================
+        // GET HTML ELEMENTS
+        // ==============================================
 
-verifyForm.addEventListener(
-    "submit",
-    async (event) => {
+        verifyForm =
+            document.getElementById(
+                "verifyForm"
+            );
 
-        event.preventDefault();
 
-        const certificateId =
-            certificateIdInput
-                .value
-                .trim()
-                .toUpperCase();
+        certificateIdInput =
+            document.getElementById(
+                "certificateIdInput"
+            );
 
-        if (!certificateId) {
 
-            verifyMessage.textContent =
-                "Please enter a certificate ID.";
+        verifyMessage =
+            document.getElementById(
+                "verifyMessage"
+            );
+
+
+        certificateResult =
+            document.getElementById(
+                "certificateResult"
+            );
+
+
+        // ==============================================
+        // CHECK ELEMENTS
+        // ==============================================
+
+        if (!verifyForm) {
+
+            console.error(
+                "verifyForm not found"
+            );
 
             return;
         }
 
-        await verifyCertificate(
-            certificateId
+
+        if (!certificateIdInput) {
+
+            console.error(
+                "certificateIdInput not found"
+            );
+
+            return;
+        }
+
+
+        // ==============================================
+        // INITIALIZE SUPABASE
+        // ==============================================
+
+        try {
+
+            console.log(
+                "Loading Supabase configuration..."
+            );
+
+
+            supabaseClient =
+                await initializeSupabase();
+
+
+            console.log(
+                "Supabase client ready."
+            );
+
+
+        } catch (error) {
+
+            console.error(
+                "Supabase initialization error:",
+                error
+            );
+
+
+            if (verifyMessage) {
+
+                verifyMessage.textContent =
+                    "Unable to connect to verification service.";
+            }
+
+
+            return;
+        }
+
+
+        // ==============================================
+        // GET CERTIFICATE ID FROM URL
+        // ==============================================
+
+        const params =
+            new URLSearchParams(
+                window.location.search
+            );
+
+
+        const urlCertificateId =
+            params.get("id");
+
+
+        if (urlCertificateId) {
+
+            const cleanCertificateId =
+                urlCertificateId
+                    .trim()
+                    .toUpperCase();
+
+
+            certificateIdInput.value =
+                cleanCertificateId;
+
+
+            await verifyCertificate(
+                cleanCertificateId
+            );
+        }
+
+
+        // ==============================================
+        // FORM SUBMIT
+        // ==============================================
+
+        verifyForm.addEventListener(
+            "submit",
+            async (event) => {
+
+                event.preventDefault();
+
+
+                const certificateId =
+                    certificateIdInput
+                        .value
+                        .trim()
+                        .toUpperCase();
+
+
+                if (!certificateId) {
+
+                    if (verifyMessage) {
+
+                        verifyMessage.textContent =
+                            "Please enter a certificate ID.";
+                    }
+
+
+                    return;
+                }
+
+
+                await verifyCertificate(
+                    certificateId
+                );
+
+            }
         );
+
     }
 );
 
 
-// =================================
-// VERIFY
-// =================================
+// ==================================================
+// VERIFY CERTIFICATE
+// ==================================================
 
 async function verifyCertificate(
     certificateId
 ) {
 
-    verifyMessage.textContent =
-        "Verifying certificate...";
+    if (!supabaseClient) {
 
-    certificateResult.innerHTML =
-        "";
+        console.error(
+            "Supabase client not initialized."
+        );
+
+        return;
+    }
+
+
+    if (verifyMessage) {
+
+        verifyMessage.textContent =
+            "Verifying certificate...";
+    }
+
+
+    if (certificateResult) {
+
+        certificateResult.innerHTML =
+            "";
+    }
 
 
     try {
 
-        const { data, error } =
+        // ==============================================
+        // QUERY CERTIFICATE
+        // ==============================================
+
+        const {
+            data,
+            error
+        } =
             await supabaseClient
 
                 .from("certificates")
@@ -121,78 +259,112 @@ async function verifyCertificate(
 
 
         if (error) {
+
             throw error;
         }
 
 
+        // ==============================================
+        // NOT FOUND
+        // ==============================================
+
         if (!data) {
 
-            verifyMessage.textContent =
-                "";
+            if (verifyMessage) {
 
-            certificateResult.innerHTML = `
+                verifyMessage.textContent =
+                    "";
+            }
 
-                <div class="invalid-result">
 
-                    <h2>
-                        ✕ Certificate Not Found
-                    </h2>
+            if (certificateResult) {
 
-                    <p>
-                        The certificate ID
-                        <strong>
-                            ${certificateId}
-                        </strong>
-                        could not be found.
-                    </p>
+                certificateResult.innerHTML = `
 
-                    <p>
-                        This certificate may be
-                        invalid or the ID may have
-                        been entered incorrectly.
-                    </p>
+                    <div class="invalid-result">
 
-                </div>
+                        <h2>
+                            ✕ Certificate Not Found
+                        </h2>
 
-            `;
+                        <p>
+                            The certificate ID
+                            <strong>
+                                ${escapeHTML(
+                                    certificateId
+                                )}
+                            </strong>
+                            could not be found.
+                        </p>
+
+                        <p>
+                            This certificate may be
+                            invalid or the ID may have
+                            been entered incorrectly.
+                        </p>
+
+                    </div>
+
+                `;
+            }
+
 
             return;
         }
 
+
+        // ==============================================
+        // INVALID STATUS
+        // ==============================================
 
         if (
             data.certificate_status !==
             "valid"
         ) {
 
-            certificateResult.innerHTML = `
+            if (verifyMessage) {
 
-                <div class="invalid-result">
+                verifyMessage.textContent =
+                    "";
+            }
 
-                    <h2>
-                        ⚠ Certificate Invalid
-                    </h2>
 
-                    <p>
-                        This certificate has been
-                        marked as invalid.
-                    </p>
+            if (certificateResult) {
 
-                </div>
+                certificateResult.innerHTML = `
 
-            `;
+                    <div class="invalid-result">
+
+                        <h2>
+                            ⚠ Certificate Invalid
+                        </h2>
+
+                        <p>
+                            This certificate has been
+                            marked as invalid.
+                        </p>
+
+                    </div>
+
+                `;
+            }
+
 
             return;
         }
 
 
-        verifyMessage.textContent =
-            "✓ Certificate successfully verified";
-
+        // ==============================================
+        // COMPANY
+        // ==============================================
 
         const company =
             data.companies;
 
+
+        // ==============================================
+        // DATES
+        // ==============================================
 
         const startDate =
             formatDate(
@@ -206,96 +378,192 @@ async function verifyCertificate(
             );
 
 
-        certificateResult.innerHTML = `
+        // ==============================================
+        // SUCCESS
+        // ==============================================
 
-            <div class="valid-result">
+        if (verifyMessage) {
 
-                <img
-                    src="${company.logo_url}"
-                    class="company-logo"
-                    alt="Company Logo"
-                >
-
-                <h2>
-                    ✓ Certificate Verified
-                </h2>
-
-                <p>
-                    This certificate is authentic
-                    and was issued by the company
-                    shown below.
-                </p>
+            verifyMessage.textContent =
+                "✓ Certificate successfully verified";
+        }
 
 
-                <div class="result-row">
+        if (certificateResult) {
 
-                    <span>
-                        CERTIFICATE ID
-                    </span>
+            certificateResult.innerHTML = `
 
-                    <strong>
-                        ${data.certificate_id}
-                    </strong>
+                <div class="valid-result">
+
+                    ${
+                        company &&
+                        company.logo_url
+                            ? `
+                                <img
+                                    src="${escapeHTML(
+                                        company.logo_url
+                                    )}"
+                                    class="company-logo"
+                                    alt="Company Logo"
+                                >
+                              `
+                            : ""
+                    }
+
+
+                    <h2>
+                        ✓ Certificate Verified
+                    </h2>
+
+
+                    <p>
+                        This certificate is authentic
+                        and was issued by the company
+                        shown below.
+                    </p>
+
+
+                    <div class="result-row">
+
+                        <span>
+                            CERTIFICATE ID
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(
+                                data.certificate_id
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-row">
+
+                        <span>
+                            INTERN
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(
+                                data.student_name
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-row">
+
+                        <span>
+                            INTERNSHIP ROLE
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(
+                                data.internship_role
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-row">
+
+                        <span>
+                            COMPANY
+                        </span>
+
+                        <strong>
+                            ${escapeHTML(
+                                company?.name || "-"
+                            )}
+                        </strong>
+
+                    </div>
+
+
+                    <div class="result-row">
+
+                        <span>
+                            INTERNSHIP PERIOD
+                        </span>
+
+                        <strong>
+                            ${startDate}
+                            -
+                            ${endDate}
+                        </strong>
+
+                    </div>
+
+
+                    ${
+                        company?.address
+                            ? `
+                                <div class="result-row">
+
+                                    <span>
+                                        ADDRESS
+                                    </span>
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            company.address
+                                        )}
+                                    </strong>
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        company?.email
+                            ? `
+                                <div class="result-row">
+
+                                    <span>
+                                        EMAIL
+                                    </span>
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            company.email
+                                        )}
+                                    </strong>
+
+                                </div>
+                              `
+                            : ""
+                    }
+
+
+                    ${
+                        company?.phone
+                            ? `
+                                <div class="result-row">
+
+                                    <span>
+                                        PHONE
+                                    </span>
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            company.phone
+                                        )}
+                                    </strong>
+
+                                </div>
+                              `
+                            : ""
+                    }
 
                 </div>
 
-
-                <div class="result-row">
-
-                    <span>
-                        INTERN
-                    </span>
-
-                    <strong>
-                        ${data.student_name}
-                    </strong>
-
-                </div>
-
-
-                <div class="result-row">
-
-                    <span>
-                        INTERNSHIP ROLE
-                    </span>
-
-                    <strong>
-                        ${data.internship_role}
-                    </strong>
-
-                </div>
-
-
-                <div class="result-row">
-
-                    <span>
-                        COMPANY
-                    </span>
-
-                    <strong>
-                        ${company.name}
-                    </strong>
-
-                </div>
-
-
-                <div class="result-row">
-
-                    <span>
-                        INTERNSHIP PERIOD
-                    </span>
-
-                    <strong>
-                        ${startDate}
-                        -
-                        ${endDate}
-                    </strong>
-
-                </div>
-
-            </div>
-
-        `;
+            `;
+        }
 
 
     } catch (error) {
@@ -305,35 +573,66 @@ async function verifyCertificate(
             error
         );
 
-        verifyMessage.textContent =
-            "Unable to verify certificate.";
 
-        certificateResult.innerHTML = `
+        if (verifyMessage) {
 
-            <div class="invalid-result">
+            verifyMessage.textContent =
+                "Unable to verify certificate.";
+        }
 
-                Something went wrong while
-                checking the certificate.
 
-            </div>
+        if (certificateResult) {
 
-        `;
+            certificateResult.innerHTML = `
+
+                <div class="invalid-result">
+
+                    <h2>
+                        Verification Error
+                    </h2>
+
+                    <p>
+                        Something went wrong while
+                        checking the certificate.
+                    </p>
+
+                </div>
+
+            `;
+        }
     }
 }
 
 
-// =================================
+// ==================================================
 // DATE FORMAT
-// =================================
+// ==================================================
 
 function formatDate(
     dateString
 ) {
 
+    if (!dateString) {
+
+        return "-";
+    }
+
+
     const date =
         new Date(
             dateString + "T00:00:00"
         );
+
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+
+        return dateString;
+    }
+
 
     return date.toLocaleDateString(
         "en-GB",
@@ -343,4 +642,21 @@ function formatDate(
             year: "numeric"
         }
     );
+}
+
+
+// ==================================================
+// HTML ESCAPE
+// ==================================================
+
+function escapeHTML(
+    value
+) {
+
+    return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
 }
