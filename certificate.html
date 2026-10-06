@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Certificate</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pinyon+Script&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/certificate.css">
+</head>
+<body>
+
+<div class="certificate" id="certificate">
+    <div class="frame-outer">
+        <div class="frame-inner">
+
+            <span class="corner tl"></span>
+            <span class="corner tr"></span>
+            <span class="corner bl"></span>
+            <span class="corner br"></span>
+
+            <!-- HEADER -->
+            <header class="company-header">
+                <img id="companyLogo" class="company-logo" src="" alt="Company Logo">
+                <h2 id="companyName" class="company-name">COMPANY NAME</h2>
+                <p id="companyAddress" class="company-address">Company Address</p>
+            </header>
+
+            <!-- TITLE -->
+            <section class="certificate-title">
+                <h1>Certificate of Internship</h1>
+                <div class="divider"><i></i><b></b><i></i></div>
+            </section>
+
+            <!-- CONTENT -->
+            <main class="certificate-content">
+                <p class="presented">This certificate is proudly presented to</p>
+
+                <h2 id="studentName" class="student-name">Student Name</h2>
+                <div class="student-line"></div>
+
+                <p class="completion-text">
+                    in recognition of the successful completion of an internship programme
+                    with dedication, professionalism and commendable performance in the role of
+                </p>
+
+                <h3 id="internshipRole" class="internship-role">Full Stack Developer Intern</h3>
+
+                <p class="period-text">
+                    during the period
+                    <strong id="internshipPeriod">01 Jun 2026 - 31 Aug 2026</strong>
+                </p>
+            </main>
+
+            <!-- FOOTER -->
+            <footer class="certificate-footer">
+
+                <div class="footer-col verification">
+                    <div id="qrcode" class="qrcode"></div>
+                    <p class="verify-text">Scan to verify certificate</p>
+                </div>
+
+                <div class="footer-col signature">
+                    <div class="signature-line">
+                        <img src="./ss-removebg-preview.png" alt="Authorized Signature">
+                    </div>
+                    <span>Authorized Signatory</span>
+                </div>
+
+                <div class="footer-col certificate-number">
+                    <div class="seal" aria-hidden="true"><span>Certified<br>Authentic</span></div>
+                    <span class="label">Certificate ID</span>
+                    <strong id="certificateId">CERT-000000</strong>
+                </div>
+
+            </footer>
+
+            <!-- CONTACT STRIP -->
+            <div class="contact-strip">
+                <span>Phone: <strong id="companyPhone">+91 9876543210</strong></span>
+                <span class="sep"></span>
+                <span>Email: <strong id="companyEmail">hr@company.com</strong></span>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="certificate-actions">
+    <button onclick="window.print()">Print Certificate</button>
+    <a href="generate.html">Generate Another</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+<script src="js/certificate.js"></script>
+</body>
+</html>

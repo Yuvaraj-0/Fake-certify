@@ -1,0 +1,9 @@
+# Supabase configuration
+js/supabase_config.js
+
+# Environment files
+.env
+.env.*
+
+# macOS
+.DS_Store

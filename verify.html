@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Verify Certificate</title>
+
+    <link
+        rel="stylesheet"
+        href="css/verify.css"
+    >
+
+</head>
+
+<body>
+
+
+<nav class="navbar">
+
+    <a
+        href="index.html"
+        class="brand"
+    >
+        CertifyPro
+    </a>
+
+    <div>
+
+        <a href="generate.html">
+            Generate Certificate
+        </a>
+
+    </div>
+
+</nav>
+
+
+<main class="verify-container">
+
+
+    <div class="verify-card">
+
+        <div class="verify-icon">
+            ✓
+        </div>
+
+
+        <h1>
+            Certificate Verification
+        </h1>
+
+
+        <p class="subtitle">
+
+            Verify the authenticity of an
+            internship certificate.
+
+        </p>
+
+
+        <form id="verifyForm">
+
+            <label>
+                Certificate ID
+            </label>
+
+            <input
+                type="text"
+                id="certificateIdInput"
+                placeholder="CERT-20261006-A81F92D3"
+            >
+
+            <button type="submit">
+                Verify Certificate
+            </button>
+
+        </form>
+
+
+        <p
+            id="verifyMessage"
+            class="verify-message"
+        ></p>
+
+
+        <div
+            id="certificateResult"
+            class="certificate-result"
+        ></div>
+
+    </div>
+
+</main>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script src="js/supabase_config.js"></script>
+
+<script src="js/verify.js"></script>
+
+</body>
+
+</html>

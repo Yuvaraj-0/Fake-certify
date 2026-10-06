@@ -1,0 +1,348 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+
+    min-height: 100vh;
+
+    font-family:
+        Arial,
+        sans-serif;
+
+    background:
+        #f5f1e8;
+
+    color:
+        #29251f;
+}
+
+
+.navbar {
+    height: 70px;
+
+    padding:
+        0 60px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content:
+        space-between;
+
+    background:
+        #ffffff;
+
+    border-bottom:
+        1px solid #e4dccb;
+}
+
+
+.brand {
+    font-size: 22px;
+
+    font-weight: bold;
+
+    color:
+        #80632e;
+}
+
+
+.nav-links {
+    display: flex;
+
+    gap: 30px;
+}
+
+
+.nav-links a {
+    text-decoration: none;
+
+    color:
+        #3f3a31;
+
+    font-size: 14px;
+}
+
+
+.hero {
+    min-height:
+        calc(100vh - 70px);
+
+    padding:
+        70px 8%;
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 70px;
+
+    align-items:
+        center;
+}
+
+
+.eyebrow {
+    color:
+        #80632e;
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    letter-spacing:
+        4px;
+}
+
+
+.hero h1 {
+    font-family:
+        Georgia,
+        serif;
+
+    font-size:
+        54px;
+
+    line-height:
+        1.1;
+
+    font-weight:
+        normal;
+
+    margin:
+        20px 0;
+}
+
+
+.hero h1 span {
+    display: block;
+
+    color:
+        #80632e;
+}
+
+
+.hero-description {
+    max-width:
+        550px;
+
+    line-height:
+        1.7;
+
+    color:
+        #625a4d;
+
+    font-size:
+        17px;
+}
+
+
+.hero-buttons {
+    display:
+        flex;
+
+    gap:
+        15px;
+
+    margin-top:
+        35px;
+}
+
+
+.btn {
+    padding:
+        14px 24px;
+
+    border-radius:
+        5px;
+
+    text-decoration:
+        none;
+
+    font-size:
+        14px;
+}
+
+
+.primary {
+    background:
+        #80632e;
+
+    color:
+        white;
+}
+
+
+.secondary {
+    border:
+        1px solid #80632e;
+
+    color:
+        #80632e;
+}
+
+
+.hero-card {
+    display:
+        flex;
+
+    justify-content:
+        center;
+}
+
+
+.mock-certificate {
+    width:
+        480px;
+
+    min-height:
+        330px;
+
+    padding:
+        35px;
+
+    text-align:
+        center;
+
+    border:
+        2px solid #9a7b3f;
+
+    outline:
+        1px solid #c7aa69;
+
+    outline-offset:
+        -12px;
+
+    background:
+        #f8f1df;
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.15);
+}
+
+
+.mock-logo {
+    width:
+        45px;
+
+    height:
+        45px;
+
+    margin:
+        0 auto 15px;
+
+    border:
+        2px solid #9a7b3f;
+
+    border-radius:
+        50%;
+
+    display:
+        flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    color:
+        #80632e;
+
+    font-weight:
+        bold;
+}
+
+
+.mock-certificate p {
+    letter-spacing:
+        4px;
+
+    font-size:
+        11px;
+
+    color:
+        #80632e;
+}
+
+
+.mock-certificate h2 {
+    font-family:
+        Georgia,
+        serif;
+
+    font-weight:
+        normal;
+
+    letter-spacing:
+        3px;
+}
+
+
+.mock-certificate span {
+    display:
+        block;
+
+    font-size:
+        11px;
+
+    color:
+        #625a4d;
+}
+
+
+.mock-certificate strong {
+    display:
+        block;
+
+    margin:
+        15px;
+
+    font-family:
+        Georgia,
+        serif;
+
+    font-size:
+        25px;
+
+    color:
+        #243858;
+}
+
+
+.mock-certificate small {
+    color:
+        #80632e;
+}
+
+
+.mock-line {
+    width:
+        150px;
+
+    height:
+        1px;
+
+    margin:
+        20px auto;
+
+    background:
+        #b69a5b;
+}
+
+
+.mock-footer {
+    display:
+        flex;
+
+    justify-content:
+        space-between;
+
+    font-size:
+        8px;
+}
