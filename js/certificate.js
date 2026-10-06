@@ -225,51 +225,28 @@ function formatDate(
     );
 }
 
-
-// ==================================================
-// QR CODE
-// ==================================================
-
-function generateQRCode(
-    verificationUrl
-) {
+function generateQRCode(verificationUrl) {
 
     const qrContainer =
-        document.getElementById(
-            "qrcode"
-        );
-
+        document.getElementById("qrcode");
 
     if (!qrContainer) {
-
         return;
     }
-
 
     if (!verificationUrl) {
-
-        console.warn(
-            "Verification URL not found."
-        );
-
+        console.warn("Verification URL not found.");
         return;
     }
 
+    console.log("QR URL:", verificationUrl);
 
     qrContainer.innerHTML = "";
 
-
-    new QRCode(
-        qrContainer,
-        {
-            text: verificationUrl,
-
-            width: 65,
-
-            height: 65,
-
-            correctLevel:
-                QRCode.CorrectLevel.H
-        }
-    );
+    new QRCode(qrContainer, {
+        text: verificationUrl,
+        width: 120,
+        height: 120,
+        correctLevel: QRCode.CorrectLevel.H
+    });
 }

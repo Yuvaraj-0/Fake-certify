@@ -202,13 +202,18 @@ body {
 
 .verification { align-items: flex-start; }
 .qrcode {
-    width: 72px;
-    height: 72px;
-    padding: 3px;
-    background: #fff;
-    border: 1px solid var(--gold-light);
+    width: 120px;
+    height: 120px;
+    padding: 4px;
+    margin: 0 auto 6px;
+    background: white;
 }
-.qrcode img { width: 64px !important; height: 64px !important; }
+
+.qrcode img {
+    width: 112px !important;
+    height: 112px !important;
+    display: block;
+}
 .verify-text {
     margin: 5px 0 0;
     font-family: "Montserrat", Arial, sans-serif;
